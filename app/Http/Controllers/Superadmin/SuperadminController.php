@@ -10,7 +10,7 @@ class SuperadminController extends Controller
     //
     
     public function index(){
-        echo "I am here";
+        return view("superadmin.dashboard");
     }
     
     public function hello($name = "you"){
