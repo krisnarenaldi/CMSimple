@@ -1,5 +1,5 @@
 <div class="d-flex">
-              <a class="header-brand" href="./index.html">
+              <a class="header-brand" href="{{ route('superadmin.home') }}">
                 <img src="https://via.placeholder.com/232x68" class="header-brand-img" alt="tabler logo">
               </a>
               <div class="d-flex order-lg-2 ml-auto">
@@ -41,12 +41,12 @@
                     <span class="avatar" style="background-image: url( {{ asset('images/demo/faces/female/25.jpg') }}">
                     </span>
                     <span class="ml-2 d-none d-lg-block">
-                      <span class="text-default">Jane Pearson</span>
-                      <small class="text-muted d-block mt-1">Administrator</small>
+                      <span class="text-default">{{ Auth::guard('superadmin')->user()->name }}</span>
+                      <small class="text-muted d-block mt-1">Superadmin</small>
                     </span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="{{ route('superadmin.profile') }}">
                       <i class="dropdown-icon fe fe-user"></i> Profile
                     </a>
                     <a class="dropdown-item" href="#">
@@ -63,9 +63,14 @@
                     <a class="dropdown-item" href="#">
                       <i class="dropdown-icon fe fe-help-circle"></i> Need help?
                     </a>
-                    <a class="dropdown-item" href="#">
-                      <i class="dropdown-icon fe fe-log-out"></i> Sign out
+                    <a class="dropdown-item" href="{{ route('superadmin.logout') }}" 
+                    onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                      <i class="dropdown-icon fe fe-log-out"></i> Sign out                    
                     </a>
+                    <form id="logout-form" action="{{ route('superadmin.logout') }}" method="POST" style="display: none;">
+                      @csrf
+                    </form>
                   </div>
                 </div><!-- //dropdown -->
               </div>

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Superadmin;
 
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class SuperadminLoginController extends Controller
 {
@@ -30,7 +31,10 @@ class SuperadminLoginController extends Controller
     public function login(Request $request){
         
             $this->validate($request,['login' => 'required',
-                        'password'=>'required']);
+                        'password'=>'required'],[
+                            'login.required' => 'Mohon isi username',
+                            'password.required' => 'Mohon isi password'
+                        ]);
         
             $login_type = filter_var($request->get("login"),FILTER_VALIDATE_EMAIL) ? "email" : "username";
             $request->merge([$login_type => $request->get("login")]);
@@ -38,7 +42,15 @@ class SuperadminLoginController extends Controller
             if($this->guard()->attempt($request->only($login_type,'password'),$request->get('remember'))){
                 return redirect()->intended($this->redirectTo);
             }
-            return back()->withInput($request->only($login_type,'remember'));
+            return back()->withErrors(["Password/Login tidak ditemukan"])->withInput($request->only($login_type,'remember'));
                 
+    }
+
+    public function logout(){
+        if($this->guard()->check()){
+            $this->guard()->logout();
+        }
+        
+        return redirect()->route("superadmin.login")->with("success","Anda berhasil logout dari halaman superadmin.");
     }
 }

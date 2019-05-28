@@ -15,7 +15,7 @@ class SuperadminRegisterController extends Controller
     //
     use RegistersUsers;
 
-    protected $redirectTo = "/superadmin";
+    protected $redirectTo = "/superadmin/login";
 
     /**
      * Create a new controller instance.
@@ -40,16 +40,22 @@ class SuperadminRegisterController extends Controller
     protected function validator(array $data)
     {
         $messages = [
-            'nama.required' => 'Mohon isi nama',
-            'nama.string' => 'Mohon isi dengan huruf saja',
-            'nama.max' => 'Jumlah maksimal karakter adalah 100',
+            'name.required' => 'Mohon isi nama.',            
+            'name.max' => 'Jumlah maksimal karakter adalah 100.',
+            'username.required' => 'Mohon isi username.',            
+            'username.unique' => 'Username sudah ada.',
+            'email.required' => 'Mohon isi Email.',
+            'email.email' => 'Mohon isi email yang valid.',
+            'email.unique' => 'Email sudah ada.',
+            'password.required' => 'Mohon isi password.',
+            'password.confirmed' => 'Password tidak sama.'
         ];
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:100'],
-            'username' => ['required', 'string', 'max:50'],
+            'username' => ['required', 'string', 'max:50','unique:superadmins'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:superadmins'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        ],$messages);
     }
 
     /**
