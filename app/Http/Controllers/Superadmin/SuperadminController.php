@@ -13,7 +13,7 @@ class SuperadminController extends Controller
         return view("superadmin.dashboard");
     }
     
-    public function hello($name = "you"){
-        echo "hello, ".$name;
+    public function mytable(){
+        return view("superadmin.tables");
     }
 }

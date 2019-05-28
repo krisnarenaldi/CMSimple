@@ -51,6 +51,11 @@ return [
             'driver' => 'session',
             'provider' => 'admins',
         ],
+
+        'superadmin' => [
+            'driver' => 'session',
+            'provider' => 'superadmins',
+        ]
     ],
 
     /*
@@ -84,7 +89,13 @@ return [
         'admins' => [
                 'driver' =>'eloquent',
                 'model' => App\Models\Admin::class
-            ]
+        ],
+
+        'superadmins' => [
+            'driver' =>'eloquent',
+            'model' => App\Models\Superadmin::class
+        ],
+
         
     ],
 
@@ -109,6 +120,19 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+
+        'admins' => [
+            'provider' => 'admins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
+        'superadmins' => [
+            'provider' => 'superadmins',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
     ],
 
 ];

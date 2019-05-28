@@ -11,5 +11,13 @@
 |
 */
 
-Route::get("/","SuperadminController@index");
-Route::get("hello/{me}","SuperadminController@hello");
+
+Route::prefix("superadmin")->name("superadmin.")->group(function(){
+    Route::get("/","SuperadminController@index");
+    Route::get("mytable","SuperadminController@mytable");
+
+    Route::get("register","SuperadminRegisterController@showRegisterForm");
+    Route::post("register","SuperadminRegisterController@postRegister")->name("register");
+});
+
+
