@@ -1,0 +1,9 @@
+[29 Mei 2019]
+1. bootstrap form validation (?)
+2. upload file (foto)
+   - pelajari upload
+   - tooltip on mouse over
+   - modal file upload with drag
+   - modal preview
+3. avatar
+4. helper

@@ -38,8 +38,13 @@
                   
                 <div class="dropdown">
                   <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
-                    <span class="avatar" style="background-image: url( {{ asset('images/demo/faces/female/25.jpg') }}">
+                    @if(Auth::guard('superadmin')->user()->avatar == "" || Auth::guard('superadmin')->user()->avatar == null)
+                      <span class="avatar avatar-blue">KR</span>
+                    @else
+                    <span class="avatar" style="background-image: url('/images/avatar/128/{{ Auth::guard('superadmin')->user()->avatar }}') ">
                     </span>
+                    @endif
+                    
                     <span class="ml-2 d-none d-lg-block">
                       <span class="text-default">{{ Auth::guard('superadmin')->user()->name }}</span>
                       <small class="text-muted d-block mt-1">Superadmin</small>
@@ -49,7 +54,7 @@
                     <a class="dropdown-item" href="{{ route('superadmin.profile') }}">
                       <i class="dropdown-icon fe fe-user"></i> Profile
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <!--a class="dropdown-item" href="#">
                       <i class="dropdown-icon fe fe-settings"></i> Settings
                     </a>
                     <a class="dropdown-item" href="#">
@@ -62,7 +67,7 @@
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">
                       <i class="dropdown-icon fe fe-help-circle"></i> Need help?
-                    </a>
+                    </a -->
                     <a class="dropdown-item" href="{{ route('superadmin.logout') }}" 
                     onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

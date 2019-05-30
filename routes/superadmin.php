@@ -12,7 +12,8 @@
 */
 
 
-Route::prefix("superadmin")->name("superadmin.")->group(function(){
+#Route::prefix("superadmin")->name("superadmin.")->group(function(){
+Route::name("superadmin.")->group(function(){
     //dashboard
     Route::get("/","SuperadminController@index")->name("home");
     Route::get("mytable","SuperadminController@mytable");

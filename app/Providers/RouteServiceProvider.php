@@ -74,9 +74,9 @@ class RouteServiceProvider extends ServiceProvider
     }
     
     protected function mapSuperadminRoutes(){
-        Route::middleware("web")                        
-              //->namespace($this->namespace)              
-              ->namespace($this->namespace."\Superadmin")
-              ->group(base_path("routes/superadmin.php"));    
+        Route::prefix("superadmin")
+               ->middleware("web")                                           
+               ->namespace($this->namespace."\Superadmin")
+               ->group(base_path("routes/superadmin.php"));    
     }
 }

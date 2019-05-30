@@ -65,5 +65,6 @@
         </div>
       </footer>
     </div>
+    @stack('custom-scripts')
   </body>
 </html>

@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Superadmin;
 use Auth;
 
+use Carbon\Carbon;
+use Image;
+use File;
+
 class SuperadminController extends Controller
 {
     //
@@ -16,6 +20,9 @@ class SuperadminController extends Controller
                         'username' => 'required',
                         'email' => 'required|email'
                        ];
+    
+    protected $avatar_path = 'images/avatar/';
+    protected $avatar_dimension = ['128'];
     
     protected $messages = [
         'name.required' => 'Mohon isi nama.',            
@@ -32,6 +39,7 @@ class SuperadminController extends Controller
 
     public function __construct(){
         $this->middleware("auth:superadmin");
+
     }
 
     public function index(){
@@ -48,23 +56,80 @@ class SuperadminController extends Controller
      * Profile Superadmin
      * Activity: update bio data and password
      */
-    public function profile(){
-        $superadmin = Superadmin::findorFail(Auth::guard('superadmin')->user()->id);
-        $data = ["data" => compact('superadmin')];
-
+    public function profile(){        
+        
+        $superadmin = Superadmin::findorFail(Auth::guard('superadmin')->user()->id);        
+        $data = ["data" => compact("superadmin")];        
+        $avatar = Auth::guard('superadmin')->user()->avatar;
+        
+        if($avatar == "" || is_null($avatar)){            
+            $initial = getinitial($superadmin->name);
+            $avatar_color = avatar_colors(intval(Auth::guard('superadmin')->user()->id) - 1);
+            $data["avatar_color"] = $avatar_color;
+            $data["initial"] = $initial;
+        }                 
         return view("superadmin.profile",$data);
     }
 
     public function updateprofile(Request $request){
+        
         $superadmin = Superadmin::findorFail(Auth::guard('superadmin')->user()->id);
-
         $credentials = [];
+        $old_filename_out = $old_filename_in = $fileName = "";
 
         $name = $request->get("name");
         $username = $request->get("username");
         $email = $request->get("email");
         $current_password = $request->get("current_password");
         $password = $request->get("password");
+
+        //avatar
+        if($request->file('image')){            
+            $this->validate($request,[
+                'image' => 'bail|image|mimes:jpg,png,jpeg,svg'
+            ],[
+                'image.image' => 'Mohon upload tipe file jpg, png, jpeg,svg',
+                'image.mimes' => 'Mohon upload tipe file jpg, png, jpeg,svg'
+            ]);
+
+            $file = $request->file('image');
+            $fullname = strtolower(str_replace(" ","",Auth::guard('superadmin')->user()->name));
+            $fileName = $fullname.'_'.Carbon::now()->timestamp.'.'.$file->getClientOriginalExtension();
+            $old_filename_out =  public_path($this->avatar_path .$superadmin->avatar); 
+
+            //hapus file lama terluar
+            if(File::exists($old_filename_out)){                    
+                File::delete($old_filename_out);
+            }
+            
+            //upload original file
+            Image::make($file)->save($this->avatar_path.$fileName);
+
+            foreach($this->avatar_dimension as $row){
+                $canvas = Image::canvas($row,$row);
+
+                $resizeImage = Image::make($file)->resize($row,$row,function($constraint){
+                    $constraint->aspectRatio();
+                });
+
+                //CEK JIKA FOLDERNYA BELUM ADA
+                if (!File::isDirectory(public_path($this->avatar_path) . $row)) {
+                    //MAKA BUAT FOLDER DENGAN NAMA DIMENSI
+                    File::makeDirectory(public_path($this->avatar_path) . $row);
+                }
+
+                //hapus file lama di dalam                
+                $old_filename_in = public_path($this->avatar_path . $row . '/'.$superadmin->avatar);
+
+                if(File::exists($old_filename_in)){                    
+                    File::delete($old_filename_in);
+                }
+
+                $canvas->insert($resizeImage,'center');
+                //save the resized image
+                $canvas->save(public_path($this->avatar_path) . $row . '/' . $fileName);
+            }
+        }
         
         if($username != $superadmin->username){
             $this->rules['username'] = 'required|unique:superadmins';
@@ -93,12 +158,23 @@ class SuperadminController extends Controller
         if($current_password !=""){
             $superadmin->password = Hash::make($password);
         }
+        if($fileName !=""){
+            $superadmin->avatar = $fileName;
+        }
         $superadmin->save();
         
         $request->session()->flash("alert-success","Data Profile  berhasil di-update!");
 
         return redirect()->route('superadmin.profile');
         
+    }
+
+    protected function getinitial($name){
+        $expr = '/(?<=\s|^)[a-z]/i';
+	
+        preg_match_all($expr,$name,$matches);
+        
+        return implode('',$matches[0]);
     }
     
 }
