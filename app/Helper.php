@@ -11,7 +11,19 @@ if(!function_exists('avatar_colors')){
             'orange','yellow','lime','green','teal','cyan',
             'gray','gray-dark',
         ];
-        return $colors[$index];
+
+        $length = count($colors);
+        $result = $index;
+
+        if($index <= $length){
+            return $colors[$index-1];
+        }else{
+            while ($result > $length){                
+                $result -= $length;                             
+                if($result <= $length) break;
+            }
+            return $colors[$result];
+        }        
     }
 }
 

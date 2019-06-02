@@ -28,6 +28,9 @@ Route::name("superadmin.")->group(function(){
     Route::get("login","SuperadminLoginController@showLoginForm");
     Route::post("login","SuperadminLoginController@login")->name("login");
     Route::post("logout","SuperadminLoginController@logout")->name("logout");
+
+    Route::resource("usergroups","SuperadminUsergroupsController");
+    Route::resource("module","SuperadminModulesController");
 });
 
 

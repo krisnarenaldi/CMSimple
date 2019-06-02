@@ -10,22 +10,22 @@
                     <span class="nav-unread"></span>
                   </a>
                   <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                    <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(images/demo/faces/male/41.jpg)"></span>
+                    <a href="#" class="dropdown-item d-flex">                      
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(/images/demo/faces/male/41.jpg)"></span>
                       <div>
                         <strong>Nathan</strong> pushed new commit: Fix page load performance issue.
                         <div class="small text-muted">10 minutes ago</div>
                       </div>
                     </a>
                     <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/1.jpg)"></span>
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(/images/demo/faces/female/1.jpg)"></span>
                       <div>
                         <strong>Alice</strong> started new task: Tabler UI design.
                         <div class="small text-muted">1 hour ago</div>
                       </div>
                     </a>
                     <a href="#" class="dropdown-item d-flex">
-                      <span class="avatar mr-3 align-self-center" style="background-image: url(demo/faces/female/18.jpg)"></span>
+                      <span class="avatar mr-3 align-self-center" style="background-image: url(/images/demo/faces/female/18.jpg)"></span>
                       <div>
                         <strong>Rose</strong> deployed new version of NodeJS REST Api V3
                         <div class="small text-muted">2 hours ago</div>
@@ -39,7 +39,8 @@
                 <div class="dropdown">
                   <a href="#" class="nav-link pr-0 leading-none" data-toggle="dropdown">
                     @if(Auth::guard('superadmin')->user()->avatar == "" || Auth::guard('superadmin')->user()->avatar == null)
-                      <span class="avatar avatar-blue">KR</span>
+                      
+                      <span class="avatar avatar-{{ avatar_colors(Auth::guard('superadmin')->user()->id) }}">{{ getinitial(Auth::guard('superadmin')->user()->name) }}</span>
                     @else
                     <span class="avatar" style="background-image: url('/images/avatar/128/{{ Auth::guard('superadmin')->user()->avatar }}') ">
                     </span>

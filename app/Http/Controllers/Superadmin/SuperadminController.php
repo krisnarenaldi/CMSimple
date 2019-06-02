@@ -64,7 +64,7 @@ class SuperadminController extends Controller
         
         if($avatar == "" || is_null($avatar)){            
             $initial = getinitial($superadmin->name);
-            $avatar_color = avatar_colors(intval(Auth::guard('superadmin')->user()->id) - 1);
+            $avatar_color = avatar_colors(intval(Auth::guard('superadmin')->user()->id));
             $data["avatar_color"] = $avatar_color;
             $data["initial"] = $initial;
         }                 
